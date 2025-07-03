@@ -21,6 +21,7 @@ GRID = [
     [1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
 ]
 
+
 # === ANT CLASS ===
 class Ant:
     def __init__(self):
@@ -65,8 +66,10 @@ class Ant:
         nx, ny = self.x + dx, self.y + dy
         return 0 <= nx < 10 and 0 <= ny < 10 and self.grid[ny][nx] == 1
 
+
 # === GP SETUP ===
 pset = gp.PrimitiveSet("MAIN", 0)
+
 
 # Primitives
 def if_food_then_else(cond, a, b):
@@ -77,11 +80,13 @@ def if_food_then_else(cond, a, b):
             b()
     return wrapped
 
+
 # Terminals (wrapped in lambdas)
 def move_forward(): return lambda: ant.forward()
 def turn_left(): return lambda: ant.turn_left()
 def turn_right(): return lambda: ant.turn_right()
 def sense_food_ahead(): return lambda: ant.sense_food_ahead()
+
 
 # Register primitives and terminals
 pset.addPrimitive(if_food_then_else, 3)
@@ -104,6 +109,8 @@ toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
 toolbox.register("compile", gp.compile, pset=pset)
 
+
+
 # Evaluation function
 def eval_ant(individual):
     global ant
@@ -121,6 +128,8 @@ toolbox.register("mate", gp.cxOnePoint)
 toolbox.register("mutate", gp.mutUniform, expr=toolbox.expr, pset=pset)
 
 # === RUNNING THE GP ===
+
+
 def run_gp():
     pop = toolbox.population(n=100)
     hof = tools.HallOfFame(1)
@@ -130,6 +139,8 @@ def run_gp():
 
     pop, log = eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=40, stats=stats, halloffame=hof, verbose=True)
     return pop, log, hof[0]
+
+
 if __name__ == "__main__":
     # === RUN GP ===
     pop, log, best_ind = run_gp()
